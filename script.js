@@ -22,20 +22,22 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!selectedCell) return;
 
             let num = button.textContent;
+            let valueSpan = selectedCell.querySelector(".value");
+            let candidatesSpan = selectedCell.querySelector(".candidates");
 
             if (candidateSwitch.checked) {
-                toggleCandidate(selectedCell, num);
+                toggleCandidate(candidatesSpan, num);
             } else {
-                selectedCell.textContent = num;
+                valueSpan.textContent = num;
+                candidatesSpan.textContent = "";  // Clear candidates when setting a normal number
             }
         });
     });
 
     // Toggle candidate numbers
-    function toggleCandidate(cell, num) {
-        let currentCandidates = cell.getAttribute("data-candidates") || "";
-        let candidates = new Set(currentCandidates.split(""));
-
+    function toggleCandidate(candidatesSpan, num) {
+        let candidates = new Set(candidatesSpan.textContent.split(""));
+        
         if (candidates.has(num)) {
             candidates.delete(num);
         } else {
@@ -43,7 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         let sortedCandidates = Array.from(candidates).sort().join("");
-        cell.setAttribute("data-candidates", sortedCandidates);
-        cell.textContent = sortedCandidates;
+        candidatesSpan.textContent = sortedCandidates;
     }
 });
